@@ -6,12 +6,13 @@ typedef struct tipo_elemento tipo_elemento;
 typedef struct tipo_linha tipo_linha;
 
 int coluna_existe(Tipo_Mat_Esparsa *m, int key);
-int linha_existe(Tipo_Mat_Esparsa *m, tipo_linha *c, int key);
+int linha_existe(Tipo_Mat_Esparsa *m, int c, int key);
 Tipo_Mat_Esparsa *criar_matrix();
 int matrix_vazia(Tipo_Mat_Esparsa *m);
 void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c);
 void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m);
-void busca_elemento(Tipo_Mat_Esparsa);
+int busca_elemento(Tipo_Mat_Esparsa *m, int l, int c);
+int elemento_existe(Tipo_Mat_Esparsa *m, int l, int c); //retorna -1 se a matriz esta vazia, retorna 1 se o elemento existe, retorna 0 se o elemento nao existe
 void imprmir_matrix(Tipo_Mat_Esparsa *m);
 
 
@@ -46,14 +47,14 @@ Tipo_Mat_Esparsa* criar_matrix(){
 void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
     if(!matrix_vazia(m)){
         if(!coluna_existe(m, c)){
-            if(m->qtd_colunas < c){
+            if(m->qtd_colunas-1 < c){
                 tipo_linha *aux = m->inicio;
                 tipo_linha *nova = (tipo_linha*)calloc(sizeof(tipo_linha), 1);
                 while(aux->proximo != NULL)
                     aux = aux->proximo;
                 aux->proximo = nova;
                 nova->ID_Coluna = c;
-                m->qtd_colunas = c;
+                m->qtd_colunas = c+1;
 
                 printf("\ncoluna %d alocada.", c);
             }
@@ -89,7 +90,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
         
         m->inicio = nova;
         nova->ID_Coluna = c;
-        m->qtd_colunas = c;
+        m->qtd_colunas = c+1;
 
         printf("coluna %d alocada.", c);
     }
@@ -107,12 +108,16 @@ int coluna_existe(Tipo_Mat_Esparsa *m, int key){
     return 0;
 }
 
-int linha_existe(Tipo_Mat_Esparsa *m, tipo_linha *c, int key){
-    if(coluna_existe(m, c->ID_Coluna)){
-        tipo_elemento *aux = c->inicio;
-        while((aux->proximo != NULL) && (aux->ID_Linha != key))
-            aux = aux->proximo;
-        if(aux->ID_Linha == key)
+int linha_existe(Tipo_Mat_Esparsa *m, int c, int key){
+    if(coluna_existe(m, c)){
+        tipo_linha *auxc = m->inicio;
+        while(auxc->ID_Coluna != c)
+            auxc = auxc->proximo;
+        
+        tipo_elemento *auxl = auxc->inicio;
+        while((auxl->proximo != NULL) && (auxl->ID_Linha != key))
+            auxl = auxl->proximo;
+        if(auxl->ID_Linha == key)
             return 1;
     }
     return 0;
@@ -125,7 +130,7 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
             tipo_linha *auxc = m->inicio;
             while(c != auxc->ID_Coluna)
                 auxc = auxc->proximo;
-            if(!linha_existe(m, auxc, l)){
+            if(!linha_existe(m, auxc->ID_Coluna, l)){
                 if(auxc->inicio->ID_Linha > l){
                     tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
 
@@ -138,7 +143,7 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
 
                     printf("\nlinha %d alocada.", l);
                 }
-                else if(m->qtd_linhas < l){
+                else if(m->qtd_linhas-1 < l){
                     tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
                     tipo_elemento *aux = auxc->inicio;
                     while(aux->proximo != NULL)
@@ -147,7 +152,7 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
                     aux->proximo = novo;
                     novo->ID_Linha = l;
                     novo->valor = v;
-                    m->qtd_linhas = l;
+                    m->qtd_linhas = l+1;
                     
                 }
                 else{
@@ -185,8 +190,8 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
             aux->inicio = novo;
             novo->ID_Linha = l;
             novo->valor = v;
-            if(l > m->qtd_linhas)
-                m->qtd_linhas = l;
+            if(l > m->qtd_linhas-1)
+                m->qtd_linhas = l+1;
             
         }
     }
@@ -197,8 +202,8 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
         novo->ID_Linha = l;
         novo->valor = v;
         m->inicio->inicio = novo;
-        m->qtd_linhas = l;
-    } 
+        m->qtd_linhas = l+1;
+    }
 }
 
 
@@ -215,7 +220,7 @@ void imprmir_matrix(Tipo_Mat_Esparsa *m){
     while(auxc != NULL){
         auxl = auxc->inicio;
         while(auxl != NULL){
-            matrix[(auxl->ID_Linha)-1][(auxc->ID_Coluna)-1] = auxl->valor;
+            matrix[auxl->ID_Linha][auxc->ID_Coluna] = auxl->valor;
             printf("foi salvo o elemento %d na linha %d e coluna %d\n", auxl->valor, auxl->ID_Linha, auxc->ID_Coluna);
             auxl = auxl->proximo;
         }
@@ -229,6 +234,29 @@ void imprmir_matrix(Tipo_Mat_Esparsa *m){
         printf("\n");
     }
     
+}
+
+int busca_elemento(Tipo_Mat_Esparsa *m, int l, int c){
+    if(elemento_existe(m, l, c) == 1){
+        tipo_linha *auxc = m->inicio;
+        while(auxc->ID_Coluna != c)
+            auxc = auxc->proximo;
+        tipo_elemento *auxl = auxc->inicio;
+        while(auxl->ID_Linha != l)
+            auxl = auxl->proximo;
+        return auxl->valor;
+
+    }
+    return 0;
+}
+
+int elemento_existe(Tipo_Mat_Esparsa *m, int l, int c){
+    if(matrix_vazia(m))
+        return -1;
+    else if(coluna_existe(m, c))
+        if(linha_existe(m, c, l))
+            return 1;        
+    return 0;
 }
 
 int matrix_vazia(Tipo_Mat_Esparsa *m){

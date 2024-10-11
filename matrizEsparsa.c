@@ -29,7 +29,11 @@ int main()
 
     inserir_tipo_elemento(5, 7, 15, m);
 
+    inserir_tipo_elemento(0, 0, 33, m);
+
     imprmir_matrix(m);
+
+    printf("\n-----Valor encontrado %d------", busca_elemento(m, 5, 7));    
 
     printf("\nqt col %d qt lin %d", m->qtd_colunas, m->qtd_linhas);
 
