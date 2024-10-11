@@ -204,12 +204,10 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
 
 void imprmir_matrix(Tipo_Mat_Esparsa *m){
     tipo_linha *auxc = m->inicio;
-    int matrix[m->qtd_linhas][m->qtd_colunas];
+    int **matrix = (int**)calloc(sizeof(int*), m->qtd_linhas);
     
     for(int i=0; i < m->qtd_linhas; i++){
-        for(int j=0; j < m->qtd_colunas; j++){
-            matrix[i][j] = 0;
-        }
+        matrix[i] = (int*)calloc(sizeof(int), m->qtd_colunas);
     }
     
 
