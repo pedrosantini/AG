@@ -59,8 +59,10 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
             else if(m->inicio->ID_Coluna > c){
                 tipo_linha *nova = (tipo_linha*)calloc(sizeof(tipo_linha), 1);
 
-                nova->proximo = m->inicio;
-                m->inicio->proximo = m->inicio->proximo->proximo;
+                tipo_linha *aux = m->inicio;
+                m->inicio = nova;
+                nova->proximo = aux;
+                
                 m->inicio = nova;
                 nova->ID_Coluna = c;
 
@@ -70,15 +72,17 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
                 tipo_linha *aux = m->inicio;
                 while ((aux->proximo->ID_Coluna < c) && (aux->proximo != NULL)){
                     aux = aux->proximo;
-                    printf("\nit");
+                    //printf("aqui chega col %d", aux->proximo->ID_Coluna);
                 }
+            
                 tipo_linha *nova = (tipo_linha*)calloc(sizeof(tipo_linha), 1);
 
                 nova->proximo = aux->proximo;
                 aux->proximo = nova;
                 nova->ID_Coluna = c;
+                
 
-                printf("\ncoluna %d alocada.....", c);            
+                printf("\ncoluna %d alocada.", c);            
             }
         }
     }
@@ -125,6 +129,8 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
             aux->inicio = novo;
             novo->ID_Linha = l;
             novo->valor = v;
+            if(l > m->qtd_linhas)
+                m->qtd_linhas = l;
             
         }
     }
@@ -135,17 +141,41 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
         novo->ID_Linha = l;
         novo->valor = v;
         m->inicio->inicio = novo;
+        m->qtd_linhas = l;
     } 
 }
-/*
-void imprmir_matrix(Tipo_Mat_Esparsa *m){
-    for(int i=0; i < m->qtd_colunas; i++){
-        for(int j=0; j < m->qtd_linhas; j++){
 
+void imprmir_matrix(Tipo_Mat_Esparsa *m){
+    tipo_linha *auxc = m->inicio;
+    int matrix[m->qtd_linhas][m->qtd_colunas];
+    
+    for(int i=0; i < m->qtd_linhas; i++){
+        for(int j=0; j < m->qtd_colunas; j++){
+            matrix[i][j] = 0;
         }
     }
+    
+
+    tipo_elemento *auxl;
+    while(auxc != NULL){
+        auxl = auxc->inicio;
+        while(auxl != NULL){
+            matrix[(auxl->ID_Linha)-1][(auxc->ID_Coluna)-1] = auxl->valor;
+            printf("foi salvo o elemento %d na linha %d e coluna %d\n", auxl->valor, auxl->ID_Linha, auxc->ID_Coluna);
+            auxl = auxl->proximo;
+        }
+        auxc = auxc->proximo;
+    }
+
+    for(int i=0; i < m->qtd_linhas; i++){
+        for(int j=0; j < m->qtd_colunas; j++){
+            printf("%3d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+    
 }
-*/
+
 int matrix_vazia(Tipo_Mat_Esparsa *m){
     if((m->inicio == NULL))
         return 1;
