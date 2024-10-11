@@ -160,12 +160,17 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
                     aux->proximo = novo;
                     novo->ID_Linha = l;
                     novo->valor = v;
-                    
+
 
                 }                
             }
             else{
-            }            
+                tipo_elemento *aux = auxc->inicio;
+                while(aux->ID_Linha != l)
+                    aux = aux->proximo;
+                
+                aux->valor = v;
+            }       
         }
         else{
             inserir_tipo_linha(m, c);

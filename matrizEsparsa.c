@@ -16,17 +16,21 @@ int main()
 
     inserir_tipo_elemento(4, 7, 2, m);
 
-    inserir_tipo_elemento(5, 7, 5, m);
-
     inserir_tipo_elemento(7, 3, 15, m);
 
     inserir_tipo_elemento(3, 7, 3, m);
+
 
     printf("\n");
 
     imprmir_matrix(m);
 
-    printf("\n                    %d            \n ", linha_existe(m, m->inicio, 5));
+    printf("\n \n");
+
+    inserir_tipo_elemento(5, 7, 15, m);
+
+    imprmir_matrix(m);
+
     printf("\nqt col %d qt lin %d", m->qtd_colunas, m->qtd_linhas);
 
     return 0;
