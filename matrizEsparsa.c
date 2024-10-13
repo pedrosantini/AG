@@ -3,6 +3,7 @@
 #include <math.h>
 #include "MatrizEsparsa.h"
 
+
 int main()
 {
     Tipo_Mat_Esparsa *m = criar_matrix();
@@ -35,9 +36,19 @@ int main()
 
     printf("\n-----Valor encontrado %d------", busca_elemento(m, 5, 7));    
 
-    printf("\nqt col %d qt lin %d", m->qtd_colunas, m->qtd_linhas);
+    printf("\nqt col %d qt lin %d\n", m->qtd_colunas, m->qtd_linhas);
+
+    printf("-----%d--------\n", apaga_matrix(m));
+
+    printf("\nqt col %d qt lin %d\n", m->qtd_colunas, m->qtd_linhas);
+
+    imprmir_matrix(m);
+
+    printf("\n \n");
+
+    //printf("\n a matriz esta vazia ->%d<- ", matrix_vazia(m));
+
 
     return 0;
-
     
 }

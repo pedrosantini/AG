@@ -15,7 +15,14 @@ int busca_elemento(Tipo_Mat_Esparsa *m, int l, int c);
 int elemento_existe(Tipo_Mat_Esparsa *m, int l, int c); //retorna -1 se a matriz esta vazia, retorna 1 se o elemento existe, retorna 0 se o elemento nao existe
 void imprmir_matrix(Tipo_Mat_Esparsa *m);
 
+//-----------------------
 
+int apaga_matrix(Tipo_Mat_Esparsa *m);
+void cria_transposta(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r);
+void soma_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r);
+void multiplica_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r);
+
+//-----------------------
 typedef struct tipo_elemento{
     int valor;
     int ID_Linha;
@@ -214,7 +221,7 @@ void imprmir_matrix(Tipo_Mat_Esparsa *m){
     for(int i=0; i < m->qtd_linhas; i++){
         matrix[i] = (int*)calloc(sizeof(int), m->qtd_colunas);
     }
-    
+    printf("\n l %d -- c %d", m->qtd_linhas, m->qtd_colunas);
 
     tipo_elemento *auxl;
     while(auxc != NULL){
@@ -264,3 +271,6 @@ int matrix_vazia(Tipo_Mat_Esparsa *m){
         return 1;
     return 0;
 }
+
+
+//----------
