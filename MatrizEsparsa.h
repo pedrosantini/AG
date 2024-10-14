@@ -274,3 +274,20 @@ int matrix_vazia(Tipo_Mat_Esparsa *m){
 
 
 //----------
+
+void soma_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r){
+    if((m1->qtd_linhas == m2->qtd_linhas) && (m1->qtd_colunas == m2->qtd_colunas)){
+        if((!matrix_vazia(m1)) && (!matrix_vazia(m2))){
+            for(int i=0; i < m1->qtd_linhas; i++){
+                for(int j=0; j < m1->qtd_colunas; j++){
+                    if((elemento_existe(m1, i, j)) || (elemento_existe(m2, i, j))){
+                        inserir_tipo_elemento(i, j, busca_elemento(m1, i, j)+busca_elemento(m2, i, j), r);
+                    }
+                }
+            }
+        }
+    }
+    else{
+        printf("AS MATRIZES DEVEM TER A MESMA DIMENSAO PARA SOMAR");
+    }
+}
