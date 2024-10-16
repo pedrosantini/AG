@@ -18,7 +18,7 @@ void imprmir_matrix(Tipo_Mat_Esparsa *m);
 //-----------------------
 
 int apaga_matrix(Tipo_Mat_Esparsa *m);
-void cria_transposta(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r);
+void cria_transposta(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *r);
 void soma_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r);
 void multiplica_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r);
 
@@ -132,84 +132,87 @@ int linha_existe(Tipo_Mat_Esparsa *m, int c, int key){
 
 
 void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
-    if(!matrix_vazia(m)){
-        if(coluna_existe(m, c)){
-            tipo_linha *auxc = m->inicio;
-            while(c != auxc->ID_Coluna)
-                auxc = auxc->proximo;
-            if(!linha_existe(m, auxc->ID_Coluna, l)){
-                if(auxc->inicio->ID_Linha > l){
-                    tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
+    if(v != 0){
+        if(!matrix_vazia(m)){
+            if(coluna_existe(m, c)){
+                tipo_linha *auxc = m->inicio;
+                while(c != auxc->ID_Coluna)
+                    auxc = auxc->proximo;
+                if(!linha_existe(m, auxc->ID_Coluna, l)){
+                    if(auxc->inicio->ID_Linha > l){
+                        tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
 
-                    tipo_elemento *aux = auxc->inicio;
-                    auxc->inicio = novo;
-                    novo->proximo = aux;
-                    novo->valor = v;
-                    
-                    novo->ID_Linha = l;
+                        tipo_elemento *aux = auxc->inicio;
+                        auxc->inicio = novo;
+                        novo->proximo = aux;
+                        novo->valor = v;
+                        
+                        novo->ID_Linha = l;
 
-                    printf("\nlinha %d alocada.", l);
-                }
-                else if(m->qtd_linhas-1 < l){
-                    tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
-                    tipo_elemento *aux = auxc->inicio;
-                    while(aux->proximo != NULL)
-                        aux = aux->proximo;
-                    
-                    aux->proximo = novo;
-                    novo->ID_Linha = l;
-                    novo->valor = v;
-                    m->qtd_linhas = l+1;
-                    
+                        printf("\nlinha %d alocada.", l);
+                    }
+                    else if(m->qtd_linhas-1 < l){
+                        tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
+                        tipo_elemento *aux = auxc->inicio;
+                        while(aux->proximo != NULL)
+                            aux = aux->proximo;
+                        
+                        aux->proximo = novo;
+                        novo->ID_Linha = l;
+                        novo->valor = v;
+                        m->qtd_linhas = l+1;
+                        
+                    }
+                    else{
+                        tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
+                        tipo_elemento *aux = auxc->inicio;
+                        if (aux->proximo != NULL)
+                            while ((aux->proximo->ID_Linha < c) && (aux->proximo != NULL))
+                                aux = aux->proximo;
+                        
+                        
+                        novo->proximo = aux->proximo;
+                        aux->proximo = novo;
+                        novo->ID_Linha = l;
+                        novo->valor = v;
+
+                    }                
                 }
                 else{
-                    tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
                     tipo_elemento *aux = auxc->inicio;
-                    while ((aux->proximo->ID_Linha < c) && (aux->proximo != NULL))
+                    while(aux->ID_Linha != l)
                         aux = aux->proximo;
                     
-                    novo->proximo = aux->proximo;
-                    aux->proximo = novo;
-                    novo->ID_Linha = l;
-                    novo->valor = v;
-
-
-                }                
+                    aux->valor = v;
+                }       
             }
             else{
-                tipo_elemento *aux = auxc->inicio;
-                while(aux->ID_Linha != l)
+                inserir_tipo_linha(m, c);
+                tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
+                tipo_linha *aux = m->inicio;
+
+                
+                while(c != aux->ID_Coluna)
                     aux = aux->proximo;
                 
-                aux->valor = v;
-            }       
+                
+                aux->inicio = novo;
+                novo->ID_Linha = l;
+                novo->valor = v;
+                if(l > m->qtd_linhas-1)
+                    m->qtd_linhas = l+1;
+                
+            }
         }
         else{
             inserir_tipo_linha(m, c);
             tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
-            tipo_linha *aux = m->inicio;
 
-            
-            while(c != aux->ID_Coluna)
-                aux = aux->proximo;
-            
-            
-            aux->inicio = novo;
             novo->ID_Linha = l;
             novo->valor = v;
-            if(l > m->qtd_linhas-1)
-                m->qtd_linhas = l+1;
-            
+            m->inicio->inicio = novo;
+            m->qtd_linhas = l+1;
         }
-    }
-    else{
-        inserir_tipo_linha(m, c);
-        tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
-
-        novo->ID_Linha = l;
-        novo->valor = v;
-        m->inicio->inicio = novo;
-        m->qtd_linhas = l+1;
     }
 }
 
@@ -290,4 +293,39 @@ void soma_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa 
     else{
         printf("AS MATRIZES DEVEM TER A MESMA DIMENSAO PARA SOMAR");
     }
+}
+
+void multiplica_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa *r){
+    if((!matrix_vazia(m1)) && (!matrix_vazia(m2))){
+        if(m1->qtd_colunas == m2->qtd_linhas){
+            int soma, i, j, k;
+            for(i=0; i < m1->qtd_linhas; i++){
+                for(j=0; j < m2->qtd_colunas; j++){
+                    soma = 0;
+                    for (k=0; k < m1->qtd_colunas; k++)
+                        soma += busca_elemento(m1, i, k)*busca_elemento(m2, k, j);
+                        
+                    inserir_tipo_elemento(i, j, soma, r);
+                }
+            }
+        }
+        else{
+            printf("NAO EXISTE MULPLICACAO PARA MATRIZES DESSA DIMENSAO");
+        }
+    }
+}
+/*
+int apaga_matrix(Tipo_Mat_Esparsa *m){
+    
+    return 0;
+}
+*/
+
+void cria_transposta(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *r){
+    if (!matrix_vazia(m1)){
+        for(int i=0; i < m1->qtd_linhas; i++)
+            for(int j=0; j < m1->qtd_colunas; j++)
+                if(elemento_existe(m1, i, j))
+                    inserir_tipo_elemento(j, i, busca_elemento(m1, i, j),r);    
+    }        
 }
