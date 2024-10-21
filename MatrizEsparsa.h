@@ -218,30 +218,35 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
 
 
 void imprmir_matrix(Tipo_Mat_Esparsa *m){
-    tipo_linha *auxc = m->inicio;
-    int **matrix = (int**)calloc(sizeof(int*), m->qtd_linhas);
-    
-    for(int i=0; i < m->qtd_linhas; i++){
-        matrix[i] = (int*)calloc(sizeof(int), m->qtd_colunas);
-    }
-    printf("\n l %d -- c %d", m->qtd_linhas, m->qtd_colunas);
-
-    tipo_elemento *auxl;
-    while(auxc != NULL){
-        auxl = auxc->inicio;
-        while(auxl != NULL){
-            matrix[auxl->ID_Linha][auxc->ID_Coluna] = auxl->valor;
-            printf("foi salvo o elemento %d na linha %d e coluna %d\n", auxl->valor, auxl->ID_Linha, auxc->ID_Coluna);
-            auxl = auxl->proximo;
+    if (!matrix_vazia(m)){
+        tipo_linha *auxc = m->inicio;
+        int **matrix = (int**)calloc(sizeof(int*), m->qtd_linhas);
+        
+        for(int i=0; i < m->qtd_linhas; i++){
+            matrix[i] = (int*)calloc(sizeof(int), m->qtd_colunas);
         }
-        auxc = auxc->proximo;
-    }
+        printf("\n l %d -- c %d", m->qtd_linhas, m->qtd_colunas);
 
-    for(int i=0; i < m->qtd_linhas; i++){
-        for(int j=0; j < m->qtd_colunas; j++){
-            printf("%3d ", matrix[i][j]);
+        tipo_elemento *auxl;
+        while(auxc != NULL){
+            auxl = auxc->inicio;
+            while(auxl != NULL){
+                matrix[auxl->ID_Linha][auxc->ID_Coluna] = auxl->valor;
+                printf("foi salvo o elemento %d na linha %d e coluna %d\n", auxl->valor, auxl->ID_Linha, auxc->ID_Coluna);
+                auxl = auxl->proximo;
+            }
+            auxc = auxc->proximo;
         }
-        printf("\n");
+
+        for(int i=0; i < m->qtd_linhas; i++){
+            for(int j=0; j < m->qtd_colunas; j++){
+                printf("%3d ", matrix[i][j]);
+            }
+            printf("\n");
+        }
+    }
+    else{
+        printf("A MATRIZ ESTA VAZIA!");
     }
     
 }
@@ -314,12 +319,39 @@ void multiplica_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Es
         }
     }
 }
-/*
+
 int apaga_matrix(Tipo_Mat_Esparsa *m){
+    if (!matrix_vazia(m)){
+        tipo_linha *auxc;
+        tipo_elemento *auxl;
+        
+        while (m->inicio != NULL){
+            auxc = m->inicio;
+
+            m->inicio = auxc->proximo;
+
+            if (auxc->inicio != NULL){
+                while (auxc->inicio != NULL){
+                    auxl = auxc->inicio;
+
+                    auxc->inicio = auxl->proximo;
+
+                    free(auxl);                    
+                }
+
+                free(auxc);
+            }
+
+        }
+
+        free(m);
+
+        return 1;
+    }
     
     return 0;
 }
-*/
+
 
 void cria_transposta(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *r){
     if (!matrix_vazia(m1)){

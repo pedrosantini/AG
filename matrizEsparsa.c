@@ -49,6 +49,14 @@ int main()
 
     imprmir_matrix(trans);
 
+    printf("matrix apagada ---->%d<-------", apaga_matrix(m1));
+
+    printf("matriz vazia ---->%d<------", matrix_vazia(m1));
+
+    imprmir_matrix(m1);
+
+    printf("\nopa");
+
     return 0;
 }
 /*
