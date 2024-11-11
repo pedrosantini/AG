@@ -42,8 +42,7 @@ typedef struct Tipo_Mat_Esparsa{
 }Tipo_Mat_Esparsa;
 
 Tipo_Mat_Esparsa* criar_matrix(){
-        Tipo_Mat_Esparsa* mat = (Tipo_Mat_Esparsa*) calloc(sizeof(Tipo_Mat_Esparsa),1);     
-
+        Tipo_Mat_Esparsa* mat = (Tipo_Mat_Esparsa*) calloc(sizeof(Tipo_Mat_Esparsa), 1);     
         
         mat->qtd_colunas = 0;
         mat->qtd_linhas = 0;
@@ -63,7 +62,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
                 nova->ID_Coluna = c;
                 m->qtd_colunas = c+1;
 
-                printf("\ncoluna %d alocada.", c);
+                //printf("\ncoluna %d alocada.", c);
             }
             else if(m->inicio->ID_Coluna > c){
                 tipo_linha *nova = (tipo_linha*)calloc(sizeof(tipo_linha), 1);
@@ -73,7 +72,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
                 nova->proximo = aux;                
                 nova->ID_Coluna = c;
 
-                printf("\ncoluna %d alocada.", c);
+                //printf("\ncoluna %d alocada.", c);
             }
             else{
                 tipo_linha *aux = m->inicio;
@@ -88,7 +87,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
                 nova->ID_Coluna = c;
                 
 
-                printf("\ncoluna %d alocada.", c);            
+                //printf("\ncoluna %d alocada.", c);            
             }
         }
     }
@@ -99,7 +98,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
         nova->ID_Coluna = c;
         m->qtd_colunas = c+1;
 
-        printf("coluna %d alocada.", c);
+        //printf("coluna %d alocada.", c);
     }
 }
 
@@ -149,7 +148,7 @@ void inserir_tipo_elemento(int l, int c, int v, Tipo_Mat_Esparsa *m){
                         
                         novo->ID_Linha = l;
 
-                        printf("\nlinha %d alocada.", l);
+                        //printf("\nlinha %d alocada.", l);
                     }
                     else if(m->qtd_linhas-1 < l){
                         tipo_elemento *novo = (tipo_elemento*)calloc(sizeof(tipo_elemento), 1);
@@ -225,14 +224,14 @@ void imprmir_matrix(Tipo_Mat_Esparsa *m){
         for(int i=0; i < m->qtd_linhas; i++){
             matrix[i] = (int*)calloc(sizeof(int), m->qtd_colunas);
         }
-        printf("\n l %d -- c %d", m->qtd_linhas, m->qtd_colunas);
+        //printf("\n l %d -- c %d", m->qtd_linhas, m->qtd_colunas);
 
         tipo_elemento *auxl;
         while(auxc != NULL){
             auxl = auxc->inicio;
             while(auxl != NULL){
                 matrix[auxl->ID_Linha][auxc->ID_Coluna] = auxl->valor;
-                printf("foi salvo o elemento %d na linha %d e coluna %d\n", auxl->valor, auxl->ID_Linha, auxc->ID_Coluna);
+                //printf("foi salvo o elemento %d na linha %d e coluna %d\n", auxl->valor, auxl->ID_Linha, auxc->ID_Coluna);
                 auxl = auxl->proximo;
             }
             auxc = auxc->proximo;
@@ -315,7 +314,7 @@ void multiplica_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Es
             }
         }
         else{
-            printf("NAO EXISTE MULPLICACAO PARA MATRIZES DESSA DIMENSAO");
+            printf("NAO EXISTE MULPLICACAO PARA MATRIZES DESSAS DIMENSÕESi");
         }
     }
 }
@@ -343,6 +342,9 @@ int apaga_matrix(Tipo_Mat_Esparsa *m){
             }
 
         }
+
+        m->qtd_colunas = 0;
+        m->qtd_linhas = 0;
 
         free(m);
 
