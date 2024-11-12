@@ -243,9 +243,11 @@ void imprmir_matrix(Tipo_Mat_Esparsa *m){
             }
             printf("\n");
         }
+        
+
     }
     else{
-        printf("A MATRIZ ESTA VAZIA!");
+        printf("A MATRIZ ESTA VAZIA!\n");
     }
     
 }
@@ -259,7 +261,6 @@ int busca_elemento(Tipo_Mat_Esparsa *m, int l, int c){
         while(auxl->ID_Linha != l)
             auxl = auxl->proximo;
         return auxl->valor;
-
     }
     return 0;
 }
@@ -295,7 +296,7 @@ void soma_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Esparsa 
         }
     }
     else{
-        printf("AS MATRIZES DEVEM TER A MESMA DIMENSAO PARA SOMAR");
+        printf("AS MATRIZES DEVEM TER A MESMA DIMENSAO PARA SOMAR\n");
     }
 }
 
@@ -314,7 +315,7 @@ void multiplica_matrixes(Tipo_Mat_Esparsa *m1, Tipo_Mat_Esparsa *m2, Tipo_Mat_Es
             }
         }
         else{
-            printf("NAO EXISTE MULPLICACAO PARA MATRIZES DESSAS DIMENSÕESi");
+            printf("NAO EXISTE MULPLICACAO PARA MATRIZES DESSAS DIMENSÕES\n");
         }
     }
 }

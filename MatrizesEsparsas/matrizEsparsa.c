@@ -23,6 +23,8 @@ int main()
 
     inserir_tipo_elemento(1, 20, 12, m1);
 
+    printf("Matriz 1:\n");
+
     imprmir_matrix(m1);
 
     Tipo_Mat_Esparsa *m2 = criar_matrix();
@@ -39,6 +41,8 @@ int main()
 
     inserir_tipo_elemento(1, 1, 8, m2); 
 
+    printf("Matriz 2:\n");
+
     imprmir_matrix(m2);
 
     printf("\n");
@@ -46,6 +50,8 @@ int main()
     Tipo_Mat_Esparsa *r = criar_matrix();
 
     multiplica_matrixes(m1,m2,r);
+
+    printf("Matriz multiplicação 1 e 2:\n");
 
     imprmir_matrix(r);
 
@@ -55,7 +61,39 @@ int main()
 
     cria_transposta(m1, trans);
 
+    printf("Matriz 1 transposta:\n");
+
     imprmir_matrix(trans);
+
+    printf("\n");
+
+    Tipo_Mat_Esparsa *soma = criar_matrix();
+
+    soma_matrixes(m1, m2, soma);
+
+    printf("Matriz soma 1 e 2:\n");
+
+    imprmir_matrix(soma);
+
+    Tipo_Mat_Esparsa *m3 = criar_matrix();
+
+    inserir_tipo_elemento(0, 0, 21, m3);
+
+    inserir_tipo_elemento(1, 3, 2, m3);
+
+    inserir_tipo_elemento(20, 15, 3, m3);
+
+    printf("Matriz 3:\n");
+
+    imprmir_matrix(m3);
+
+    soma_matrixes(m2, m3, soma);
+
+    printf("\n");
+
+    printf("Matriz soma 2 e 3:\n");
+
+    imprmir_matrix(soma);
 
     printf("\n");
 
