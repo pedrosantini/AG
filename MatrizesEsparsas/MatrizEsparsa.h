@@ -55,7 +55,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
         if(!coluna_existe(m, c)){
             if(m->qtd_colunas-1 < c){
                 tipo_linha *aux = m->inicio;
-                tipo_linha *nova = (tipo_linha*)calloc(sizeof(tipo_linha), 1);
+                tipo_linha *nova = (tipo_linha*)calloc(1, sizeof(tipo_linha));
                 while(aux->proximo != NULL)
                     aux = aux->proximo;
                 aux->proximo = nova;
@@ -65,7 +65,7 @@ void inserir_tipo_linha(Tipo_Mat_Esparsa *m, int c){
                 //printf("\ncoluna %d alocada.", c);
             }
             else if(m->inicio->ID_Coluna > c){
-                tipo_linha *nova = (tipo_linha*)calloc(sizeof(tipo_linha), 1);
+                tipo_linha *nova = (tipo_linha*)calloc(1, sizeof(tipo_linha));
 
                 tipo_linha *aux = m->inicio;
                 m->inicio = nova;
