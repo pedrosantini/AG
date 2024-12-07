@@ -87,6 +87,7 @@ void insert_aresta(int v1, int v2, grafo *g){
                 aresta *a1;
                 aresta *a2;
                 
+                
                 if ((auxV1->a == NULL) && (auxV2->a == NULL)){
                     
                     auxV1->a = (aresta*)calloc(1, sizeof(aresta));
@@ -98,7 +99,7 @@ void insert_aresta(int v1, int v2, grafo *g){
 
                 }
 
-                else if ((auxV1->a != NULL) && (auxV2 == NULL)){
+                else if ((auxV1->a != NULL) && (auxV2->a == NULL)){
                     a1 = auxV1->a;
 
                     while(a1->prox != NULL){                        
@@ -114,7 +115,7 @@ void insert_aresta(int v1, int v2, grafo *g){
 
                 }
 
-                else if ((auxV1->a == NULL) && (auxV2 != NULL)){
+                else if ((auxV1->a == NULL) && (auxV2->a != NULL)){
                     a2 = auxV2->a;
 
                     while(a2->prox != NULL){                        
@@ -146,10 +147,7 @@ void insert_aresta(int v1, int v2, grafo *g){
                     a2->prox = (aresta*)calloc(1, sizeof(aresta));
                     a2->prox->aid = v1;
 
-                }
-
-                
-            
+                }            
                               
 
             }
@@ -220,7 +218,45 @@ int buscar_aresta(int v1, int v2, grafo *g){
     return 0;
 }
 
-void remover_vertices(int id, grafo *g);
+void remover_vertices(int id, grafo *g){
+    if (!grafo_vazio(g)){
+        if (buscar_vert(id, g)){
+            vertice *vProx = g->inicio;
+            vertice *vAnt = NULL; 
+            
+            while (vProx->id != id){
+                vAnt = vProx;
+                vProx = vProx->next;
+            }
+
+            if (vProx->a != NULL){
+                aresta *aAux = vProx->a;
+
+                while (aAux != NULL){
+                    remover_aresta(aAux->aid, vProx->id, g);
+                    aAux = aAux->prox;
+                }
+            }    
+
+            if (vAnt == NULL){
+                if (vProx->next == NULL)
+                    g->inicio = NULL;
+                
+                else
+                    g->inicio = vProx->next;
+            }
+            else{
+                if (vProx->next == NULL)
+                    vAnt->next = NULL;
+                
+                else
+                    vAnt->next = vProx->next;
+            }
+
+            free(vProx);
+        }
+    }
+}
 
 void remover_aresta(int v1, int v2, grafo *g){
     if (!grafo_vazio(g)){
