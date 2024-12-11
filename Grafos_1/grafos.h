@@ -68,96 +68,98 @@ void insert_vertice(int x, grafo *g){
 }
 
 void insert_aresta(int v1, int v2, grafo *g){
-    if(!grafo_vazio(g)){             
-        if (!buscar_aresta(v1, v2, g)){
-            if (buscar_vert(v1, g) && buscar_vert(v2, g)){
-                vertice *auxV1 = g->inicio;
-                vertice *auxV2 = g->inicio;
+    if(!grafo_vazio(g)){   
+        if (v2 != v1){          
+            if (!buscar_aresta(v1, v2, g)){
+                if (buscar_vert(v1, g) && buscar_vert(v2, g)){
+                    vertice *auxV1 = g->inicio;
+                    vertice *auxV2 = g->inicio;
 
-                
-
-                while ((auxV1->id != v1) || (auxV2->id != v2)){
-                    if(auxV1->id != v1)
-                        auxV1 = auxV1->next;
-                    
-                    if (auxV2->id != v2)
-                        auxV2 = auxV2->next;
-                }
-
-                aresta *a1;
-                aresta *a2;
-                
-                
-                if ((auxV1->a == NULL) && (auxV2->a == NULL)){
-                    
-                    auxV1->a = (aresta*)calloc(1, sizeof(aresta));
-                    auxV1->a->aid = v2;
-
-                    auxV2->a = (aresta*)calloc(1, sizeof(aresta));
-                    auxV2->a->aid = v1;
                     
 
+                    while ((auxV1->id != v1) || (auxV2->id != v2)){
+                        if(auxV1->id != v1)
+                            auxV1 = auxV1->next;
+                        
+                        if (auxV2->id != v2)
+                            auxV2 = auxV2->next;
+                    }
+
+                    aresta *a1;
+                    aresta *a2;
+                    
+                    
+                    if ((auxV1->a == NULL) && (auxV2->a == NULL)){
+                        
+                        auxV1->a = (aresta*)calloc(1, sizeof(aresta));
+                        auxV1->a->aid = v2;
+
+                        auxV2->a = (aresta*)calloc(1, sizeof(aresta));
+                        auxV2->a->aid = v1;
+                        
+
+                    }
+
+                    else if ((auxV1->a != NULL) && (auxV2->a == NULL)){
+                        a1 = auxV1->a;
+
+                        while(a1->prox != NULL){                        
+                            a1 = a1->prox;
+                        }
+
+                        a1->prox = (aresta*)calloc(1, sizeof(aresta));
+                        a1->prox->aid = v2;
+
+                        auxV2->a = (aresta*)calloc(1, sizeof(aresta));
+                        auxV2->a->aid = v1;                
+
+
+                    }
+
+                    else if ((auxV1->a == NULL) && (auxV2->a != NULL)){
+                        a2 = auxV2->a;
+
+                        while(a2->prox != NULL){                        
+                            a2 = a2->prox;
+                        }
+
+                        a2->prox = (aresta*)calloc(1, sizeof(aresta));
+                        a2->prox->aid = v1;
+
+                        auxV1->a = (aresta*)calloc(1, sizeof(aresta));
+                        auxV1->a->aid = v2; 
+                    }
+
+                    else{
+                        a1 = auxV1->a;
+                        a2 = auxV2->a;
+
+                        while(a1->prox != NULL){                        
+                            a1 = a1->prox;
+                        }
+
+                        while(a2->prox != NULL){                        
+                            a2 = a2->prox;
+                        }
+
+                        a1->prox = (aresta*)calloc(1, sizeof(aresta));
+                        a1->prox->aid = v2;
+
+                        a2->prox = (aresta*)calloc(1, sizeof(aresta));
+                        a2->prox->aid = v1;
+
+                    }            
+                                
+
                 }
-
-                else if ((auxV1->a != NULL) && (auxV2->a == NULL)){
-                    a1 = auxV1->a;
-
-                    while(a1->prox != NULL){                        
-                        a1 = a1->prox;
-                    }
-
-                    a1->prox = (aresta*)calloc(1, sizeof(aresta));
-                    a1->prox->aid = v2;
-
-                    auxV2->a = (aresta*)calloc(1, sizeof(aresta));
-                    auxV2->a->aid = v1;                
-
-
-                }
-
-                else if ((auxV1->a == NULL) && (auxV2->a != NULL)){
-                    a2 = auxV2->a;
-
-                    while(a2->prox != NULL){                        
-                        a2 = a2->prox;
-                    }
-
-                    a2->prox = (aresta*)calloc(1, sizeof(aresta));
-                    a2->prox->aid = v1;
-
-                    auxV1->a = (aresta*)calloc(1, sizeof(aresta));
-                    auxV1->a->aid = v2; 
-                }
-
-                else{
-                    a1 = auxV1->a;
-                    a2 = auxV2->a;
-
-                    while(a1->prox != NULL){                        
-                        a1 = a1->prox;
-                    }
-
-                    while(a2->prox != NULL){                        
-                        a2 = a2->prox;
-                    }
-
-                    a1->prox = (aresta*)calloc(1, sizeof(aresta));
-                    a1->prox->aid = v2;
-
-                    a2->prox = (aresta*)calloc(1, sizeof(aresta));
-                    a2->prox->aid = v1;
-
-                }            
-                              
-
+                else
+                    printf("pelo menos um dos vertices nao existe\n");
             }
             else
-                printf("pelo menos um dos vertices nao existe\n");
+                printf("aresta ja existe\n");
         }
         else
-            printf("aresta ja existe\n");
-        
-            
+            printf("vertices iguais\n");   
     }
     else
         printf("grafo vazio\n");

@@ -8,6 +8,30 @@
 int main(){
     grafo *g = criar_grafo();
 
+    insert_vertice(1, g);
+    insert_vertice(2, g);
+    insert_vertice(3, g);
+    insert_vertice(4, g);
+    insert_vertice(5, g);
+    insert_vertice(6, g);
+    insert_vertice(7, g);
+    insert_vertice(8, g);
+    insert_vertice(9, g);
+
+    insert_aresta(1, 2, g);
+    insert_aresta(1, 6, g);
+    insert_aresta(2, 3, g);
+    insert_aresta(2, 4, g);
+    insert_aresta(3, 5, g);
+    insert_aresta(4, 6, g);
+    insert_aresta(4, 5, g);
+    insert_aresta(4, 7, g);
+    insert_aresta(7, 8, g);
+    insert_aresta(7, 9, g);
+
+
+    visualizar_grafo(g);
+
     int op=0;
 
     
@@ -83,32 +107,11 @@ int main(){
         }
     }
     
+    free(g);
     
-    /*
-    insert_vertice(1, g);
-    insert_vertice(2, g);
-    insert_vertice(3, g);
-    insert_vertice(4, g);
-    insert_vertice(5, g);
-    insert_vertice(6, g);
-    insert_vertice(7, g);
-    insert_vertice(8, g);
-    insert_vertice(9, g);
+    
 
-    visualizar_grafo(g);
-
-    insert_aresta(1, 2, g);
-    insert_aresta(1, 6, g);
-    insert_aresta(2, 4, g);
-    insert_aresta(2, 3, g);
-    insert_aresta(3, 5, g);
-    insert_aresta(4, 6, g);
-    insert_aresta(4, 5, g);
-    insert_aresta(4, 7, g);
-    insert_aresta(7, 8, g);
-    insert_aresta(7, 9, g);
-
-    visualizar_grafo(g);*/
+    
     
     return 0;
 }
