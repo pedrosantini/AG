@@ -16,6 +16,7 @@ int main(){
     insert_vertice(6, g);
     insert_vertice(7, g);
     insert_vertice(8, g);
+    insert_vertice(8, g);
     insert_vertice(9, g);
 
     insert_aresta(1, 2, g);

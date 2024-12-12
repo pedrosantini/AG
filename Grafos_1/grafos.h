@@ -5,7 +5,7 @@ typedef struct grafo grafo;
 typedef struct vertice vertice;
 typedef struct aresta aresta;
 
-int grafo_vazio(grafo *g);
+int grafo_nulo(grafo *g);
 int buscar_vert(int id, grafo *g);
 int buscar_aresta(int v1, int v2, grafo *g);
 void insert_vertice(int id, grafo *g);
@@ -40,15 +40,14 @@ grafo *criar_grafo(){
     return g;
 }
 
-int grafo_vazio(grafo *g){
+int grafo_nulo(grafo *g){
     if (g->inicio == NULL)
         return 1;
     return 0;
-
 }
 
 void insert_vertice(int x, grafo *g){
-    if (!grafo_vazio(g)){
+    if (!grafo_nulo(g)){
         if (!buscar_vert(x, g)){
             vertice *aux = g->inicio;
             while(aux->next != NULL)
@@ -58,17 +57,16 @@ void insert_vertice(int x, grafo *g){
             
         }
         else
-            printf("vertice já tá lá");
+            printf("vertice ja existe\n");
     }
     else{
         g->inicio = (vertice*)calloc(sizeof(vertice), 1);
         g->inicio->id = x;
-        
     }
 }
 
 void insert_aresta(int v1, int v2, grafo *g){
-    if(!grafo_vazio(g)){   
+    if(!grafo_nulo(g)){   
         if (v2 != v1){          
             if (!buscar_aresta(v1, v2, g)){
                 if (buscar_vert(v1, g) && buscar_vert(v2, g)){
@@ -161,12 +159,10 @@ void insert_aresta(int v1, int v2, grafo *g){
         else
             printf("vertices iguais\n");   
     }
-    else
-        printf("grafo vazio\n");
 }
 
 void visualizar_grafo(grafo *g){
-    if (!grafo_vazio(g)){
+    if (!grafo_nulo(g)){
         vertice *auxV = g->inicio;
         while (auxV != NULL){
             printf("%d ->", auxV->id);
@@ -184,12 +180,12 @@ void visualizar_grafo(grafo *g){
         }
     }
     else
-        printf("o grafo nao existe");
+        printf("o grafo nao existe\n");
 
 }
 
 int buscar_vert(int id, grafo *g){
-    if (!grafo_vazio(g)){
+    if (!grafo_nulo(g)){
         vertice *auxV = g->inicio;
         while (auxV != NULL){
             if (id == auxV->id)
@@ -221,7 +217,7 @@ int buscar_aresta(int v1, int v2, grafo *g){
 }
 
 void remover_vertices(int id, grafo *g){
-    if (!grafo_vazio(g)){
+    if (!grafo_nulo(g)){
         if (buscar_vert(id, g)){
             vertice *vProx = g->inicio;
             vertice *vAnt = NULL; 
@@ -257,11 +253,13 @@ void remover_vertices(int id, grafo *g){
 
             free(vProx);
         }
+        else
+            printf("o vertice nao existe\n");
     }
 }
 
 void remover_aresta(int v1, int v2, grafo *g){
-    if (!grafo_vazio(g)){
+    if (!grafo_nulo(g)){
         if (buscar_aresta(v1, v2, g)){
             vertice *auxV1 = g->inicio;
             vertice *auxV2 = g->inicio;
@@ -290,9 +288,7 @@ void remover_aresta(int v1, int v2, grafo *g){
                 proxima2 = proxima2->prox;
             }
 
-            // printf("AGORA 1 - %d AGORA 2 - %d", agora1->aid, agora2->aid);
 
-            printf("\n");
             if (agora1 == NULL){
                 if (proxima1->prox == NULL)
                     auxV1->a = NULL;
@@ -325,6 +321,9 @@ void remover_aresta(int v1, int v2, grafo *g){
             free(proxima2);
 
         }
+        else
+            printf("a aresta nao existe\n");
     }
+    
 }
 
