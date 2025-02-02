@@ -13,6 +13,14 @@ void insert_aresta(int v1, int v2, int peso, grafo *g);
 void visualizar_grafo(grafo *g);
 void remover_vertices(int id, grafo *g);
 void remover_aresta(int v1, int v2, grafo *g);
+int informa_grau(int v1, int v2, grafo *g);
+int grafo_conexo(grafo *g);
+void conv_mat_adj(grafo *g);
+int qtd_v(grafo *g);
+int qtd_a(grafo *g);
+int busca_em_profundidade(vertice *v, int *verticesVisitados, grafo *g);
+
+
 
 
 typedef struct grafo{
@@ -336,3 +344,97 @@ void remover_aresta(int v1, int v2, grafo *g){
     
 }
 
+
+int informa_grau(int v1, int v2, grafo *g){
+
+    if (buscar_vert(v1, g) && buscar_vert(v2, g)){
+        vertice *auxV = g->inicio;
+
+        while (auxV->id != v1)
+            auxV = auxV->next;
+        
+        aresta *auxA = auxV->a;
+
+        while (auxA != NULL){
+            if (auxA->aid == v2)
+                return auxA->p;
+            auxA = auxA->prox;
+        }
+            
+    }
+
+    return -1;
+}
+
+int qtd_v(grafo *g){ // não colocado no cabeçalho
+    if (!grafo_nulo(g)){
+        int v;
+        vertice *auxV = g->inicio;
+        while (auxV != NULL){
+            v = auxV->id;
+            auxV = auxV->next;
+        }
+        return v;
+    }
+
+    return 0;
+}
+
+int qtd_a(grafo *g){ // não colocado no cabeçalho
+    if (!grafo_nulo(g)){
+        int a=0;
+        int v = qtd_v(g);
+        for (int i=1; i < v; i++){
+            for (int j=i+1; j <= v; j++){
+                if (buscar_aresta(i, j, g))
+                    a++;
+            }
+        }
+
+        return a;
+    }
+    return 0;
+}
+
+int grafo_conexo(grafo *g){
+    if(!grafo_nulo(g)){
+        int qv;
+        qv = qtd_v(g);
+
+        int *v = (int*)calloc(qv, sizeof(int));
+
+        vertice *auxV = g->inicio;
+
+        busca_em_profundidade(auxV, v, g);
+
+        for (int i=0; i < qv; i++){
+            if (v[i] == 0)
+                return 0;
+        }
+
+    }
+    return 1;
+}
+
+void conv_mat_adj(grafo *g);
+
+int busca_em_profundidade(vertice *v, int *verticesVisitados, grafo *g){
+    if (v == NULL || verticesVisitados[v->id - 1]) {
+        return 1;
+    }
+    else{
+        verticesVisitados[v->id - 1] = 1;
+        aresta *aux = v->a; 
+        
+        while (aux != NULL) {
+            vertice *busca = g->inicio;
+
+            while (busca != NULL && busca->id != aux->aid){
+                busca = busca->next;
+            }
+            busca_em_profundidade(busca, verticesVisitados, g);
+            aux = aux->prox;
+        }
+        return 0;
+    }
+}

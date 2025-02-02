@@ -37,14 +37,17 @@ int main(){
 
     
 
-    while(op!=6){
+    while(op!=10){
         printf("\nEscolha uma das opcoes: \n");
         printf("1 - Inserir Vertice\n");
         printf("2 - Inserir Aresta\n");
         printf("3 - Visualizar grafo\n");
         printf("4 - Remover Vertice\n");
         printf("5 - Remover Aresta\n");
-        printf("6 - Sair\n");
+        printf("6 - Informar grau\n");
+        printf("6 - Grafo eh conexo\n");
+
+        printf("10 - Sair\n");
         printf("Opcao: ");
         scanf("%d", &op);
 
@@ -98,7 +101,33 @@ int main(){
 
                 break;
             
-            case 6: 
+            case 6:
+                printf("\nId do vertice e do proximo respectivamente: ");
+                scanf("%d %d", &ant, &prox);
+
+                printf("O grau da aresta eh %d", informa_grau(ant, prox, g));
+
+                break;
+
+            case 7:
+                if (grafo_conexo(g))
+                    printf("O grafo eh conexo\n");
+                else
+                    printf("O grafo nao eh conexo\n");
+                    
+                            
+                break;
+            /*
+            case 8:
+                printf("Matriz de adjacencias: \n");
+                conv_mat_adj(g);
+                break;
+
+            case 9:
+                break;
+                */            
+
+            case 10:
                 printf("Encerrando o Programa\n");
                 break;
 
@@ -109,7 +138,6 @@ int main(){
     }
     
     free(g);
-    
     
 
     
