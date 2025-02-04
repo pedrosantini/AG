@@ -13,14 +13,14 @@ void insert_aresta(int v1, int v2, int peso, grafo *g);
 void visualizar_grafo(grafo *g);
 void remover_vertices(int id, grafo *g);
 void remover_aresta(int v1, int v2, grafo *g);
-int informa_grau(int v1, int v2, grafo *g);
+int informa_grau(int v, grafo *g);
 int grafo_conexo(grafo *g);
 void conv_mat_adj(grafo *g);
 int qtd_v(grafo *g);
 int qtd_a(grafo *g);
 int busca_em_profundidade(vertice *v, int *verticesVisitados, grafo *g);
-
-
+void busca_em_largura(vertice *v, int *visitado, grafo *g);
+vertice *visitarVert(int id, grafo *g);
 
 
 typedef struct grafo{
@@ -344,23 +344,36 @@ void remover_aresta(int v1, int v2, grafo *g){
     
 }
 
+vertice *visitarVert(int id, grafo *g){
+    if (!grafo_nulo(g)){
+        if (buscar_vert(id, g)){
+            vertice *auxV = g->inicio;
+            while (auxV->id != id)
+                auxV = auxV->next;
+            
+            return auxV;
+        }
+    }
+    return NULL;
+}
 
-int informa_grau(int v1, int v2, grafo *g){
 
-    if (buscar_vert(v1, g) && buscar_vert(v2, g)){
+int informa_grau(int v, grafo *g){
+    if (buscar_vert(v, g)){
+        int gr = 0;
         vertice *auxV = g->inicio;
 
-        while (auxV->id != v1)
+        while (auxV->id != v)
             auxV = auxV->next;
         
         aresta *auxA = auxV->a;
 
         while (auxA != NULL){
-            if (auxA->aid == v2)
-                return auxA->p;
+            gr++;
             auxA = auxA->prox;
         }
-            
+
+        return gr;
     }
 
     return -1;
@@ -405,7 +418,7 @@ int grafo_conexo(grafo *g){
 
         vertice *auxV = g->inicio;
 
-        busca_em_profundidade(auxV, v, g);
+        busca_em_largura(auxV, v, g);
 
         for (int i=0; i < qv; i++){
             if (v[i] == 0)
@@ -416,14 +429,64 @@ int grafo_conexo(grafo *g){
     return 1;
 }
 
-void conv_mat_adj(grafo *g);
+void conv_mat_adj(grafo *g){
+    if (!grafo_nulo(g)){
+        int qv = qtd_v(g);
 
-int busca_em_profundidade(vertice *v, int *verticesVisitados, grafo *g){
-    if (v == NULL || verticesVisitados[v->id - 1]) {
+        for (int i=1; i < qv; i++){
+            for (int j=1; j < qv; j++){
+                if (buscar_aresta(i, j, g))
+                    printf("1 ");
+                else
+                    printf("0 ");
+            }
+            printf("\n");
+        }
+    }
+}
+
+void busca_em_largura(vertice *v, int *visitado, grafo *g) {
+    if (v == NULL || g == NULL) {
+        return;
+    }
+
+    int numVertices = qtd_v(g); // Obtém a quantidade de vértices do grafo
+    for (int i = 0; i < numVertices; i++) {
+        visitado[i] = 0; // Inicializa o vetor de visitados
+    }
+
+    vertice *fila[numVertices]; // Fila para armazenar os vértices a serem visitados
+    int inicio = 0, fim = 0;
+
+    fila[fim++] = v;
+    visitado[v->id-1] = 1;
+
+    while (inicio < fim) {
+        vertice *atual = fila[inicio++];
+        printf("Visitando vertice: %d\n", atual->id);
+
+        aresta *a = atual->a;
+        while (a != NULL) {
+            int vizinhoID = a->aid;
+            vertice *vizinho = visitarVert(vizinhoID, g);
+            
+            if (vizinho != NULL && !visitado[vizinho->id - 1]) {
+                visitado[vizinho->id - 1] = 1;
+                fila[fim++] = vizinho;
+            }
+            a = a->prox;
+        }
+    }
+}
+
+
+
+int busca_em_profundidade(vertice *v, int *visitado, grafo *g){
+    if (v == NULL || visitado[v->id - 1]) {
         return 1;
     }
     else{
-        verticesVisitados[v->id - 1] = 1;
+        visitado[v->id - 1] = 1;
         aresta *aux = v->a; 
         
         while (aux != NULL) {
@@ -432,7 +495,7 @@ int busca_em_profundidade(vertice *v, int *verticesVisitados, grafo *g){
             while (busca != NULL && busca->id != aux->aid){
                 busca = busca->next;
             }
-            busca_em_profundidade(busca, verticesVisitados, g);
+            busca_em_profundidade(busca, visitado, g);
             aux = aux->prox;
         }
         return 0;

@@ -45,7 +45,9 @@ int main(){
         printf("4 - Remover Vertice\n");
         printf("5 - Remover Aresta\n");
         printf("6 - Informar grau\n");
-        printf("6 - Grafo eh conexo\n");
+        printf("7 - Grafo eh conexo\n");
+        printf("8 - Imprimir matriz de adjacencias\n");
+
 
         printf("10 - Sair\n");
         printf("Opcao: ");
@@ -102,10 +104,10 @@ int main(){
                 break;
             
             case 6:
-                printf("\nId do vertice e do proximo respectivamente: ");
-                scanf("%d %d", &ant, &prox);
+                printf("\nId do vertice: ");
+                scanf("%d", &ant);
 
-                printf("O grau da aresta eh %d", informa_grau(ant, prox, g));
+                printf("O grau do vertice eh %d", informa_grau(ant, g));
 
                 break;
 
@@ -117,12 +119,12 @@ int main(){
                     
                             
                 break;
-            /*
+            
             case 8:
                 printf("Matriz de adjacencias: \n");
                 conv_mat_adj(g);
                 break;
-
+/*
             case 9:
                 break;
                 */            
