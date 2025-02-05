@@ -47,6 +47,7 @@ int main(){
         printf("6 - Informar grau\n");
         printf("7 - Grafo eh conexo\n");
         printf("8 - Imprimir matriz de adjacencias\n");
+        printf("9 - Informar vertices visitados pela busca em largura\n");
 
 
         printf("10 - Sair\n");
@@ -126,7 +127,10 @@ int main(){
                 break;
 
             case 9:
-                printf("%d", qtd_a(g));
+                printf("\n");
+                int *visitados = (int*)calloc(sizeof(int), qtd_v(g));
+                busca_em_largura(g->inicio, visitados, g);
+                free(visitados);
                 break;            
 
             case 10:
@@ -139,10 +143,7 @@ int main(){
         }
     }
     
-    free(g);
-    
-
-    
+    free(g);   
     
     return 0;
 }
