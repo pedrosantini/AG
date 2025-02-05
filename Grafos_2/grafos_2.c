@@ -124,10 +124,10 @@ int main(){
                 printf("Matriz de adjacencias: \n");
                 conv_mat_adj(g);
                 break;
-/*
+
             case 9:
-                break;
-                */            
+                printf("%d", qtd_a(g));
+                break;            
 
             case 10:
                 printf("Encerrando o Programa\n");
